@@ -6,7 +6,7 @@ Run the following in solar user. Replace SUDO_USER with a username with sudo ele
 cd && bash <(curl -s https://raw.githubusercontent.com/osrn/core2_tbw/master/install.sh) SUDO_USER
 ```
 
-Next, clone the [sample config](./core/config/config.sample) i.e. `cp core/config/config.example core/config/config`, and modify as explained in [README.md #Configuration Options](README.md#configuration--usage)
+Next, clone the [sample config](./core/config/config.sample) i.e. `cp core2_tbw/core/config/config.sample core2_tbw/core/config/config`, and modify as explained in [README.md #Configuration Options](README.md#configuration--usage)
 
 <br>
 
