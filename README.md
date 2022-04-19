@@ -46,13 +46,13 @@ pm2 logs /"(tbw|pay|pool)"/
 ### C/ Overwrite An Existing Installation/Clean Start
 Assuming you opted to wipe the existing installation when the install script asks, it will already care for the following. Just; restore your config afterwards (make sure start block is correct to avoid double payment for previous blocks), and move on to [initialization](#2-initialize)
 
-- ~~Stop all pm2 TBW processes (`pm2 stop tbw pay pool`)~~
+- Stop all pm2 TBW processes (`pm2 stop tbw pay pool`)
 - ~~Delete all pm2 TBW process (`pm2 delete tbw pay pool`)~~
 - ~~(Optional) delete logs (`cd ~/.pm2/logs; rm -rf tbw-* pay-* pool-*`)~~
-- ~~Backup your config file (`cp ~/core2_tbw/core/config/config ~/tbw-config.backup`)~~
-- ~~Remove core2_tbw folder~~
-- ~~Follow the [A/ Clean Install](#a-clean-install) section above~~
-
+- Backup your config file (`cp ~/core2_tbw/core/config/config ~/tbw-config-timestamp`)
+- Backup your databases (`cp ~/core2_tbw/*.db ~/*.db-timestamp`)
+- Remove core2_tbw folder
+- Fetch the latest version of the package and build dependencies
 <br>
 
 ---
@@ -111,7 +111,7 @@ This will get you to the main menu script.
 > pm2 stop tbw
 > cd ~/core2_tbw
 > . .venv/bin/activate
-> python3 core/tbw.py --shareChange`
+> python3 core/tbw.py --shareChange
 > deactivate
 > pm2 start tbw
 > ```
@@ -128,7 +128,7 @@ This will get you to the main menu script.
 | DATABASE_USER | dbname | This is the postgresql database username nodeDB (usually your os username) |
 | DELEGATE | delegate | Delegate name |
 | PUBLIC_KEY | publicKey | Delegate public key |
-| INTERVAL | 204  | The interval you want to pay voters in blocks. A setting of 204 would pay ever 204 blocks (or ~204 x 8 x 53 seconds) |
+| INTERVAL | 204  | The interval you want to pay voters in blocks. A setting of 204 would pay every 204 blocks (~= 204 x 8 x 53 seconds) |
 | VOTER_SHARE | 0.50  | Percentage to share with voters (0.xx format) |
 | PASSPHRASE | passphrase | 12 word delegate passphrase |
 | SECONDPHRASE | None | Second 12 word delegate passphrase |
@@ -176,7 +176,7 @@ This will get you to the main menu script.
 | EXPLORER | https://explorer.solar.org/ | The address of the explorer for the coin. If not exists or empty (''), will be read from network definitions|
 | PROPOSAL | https://xx.xx.xx/ | Link to the delegate proposal (if any) |
 | PROPOSALX | https://yy.yy.yy/ | Link to the delegate proposal in different language |
-| PROPOSALX_LANG | CC | Language (code) of the  second proposal |
+| PROPOSALX_LANG | CC | Language (code) of the second proposal |
 | POOL_PORT | 5000 | Port for pool/webhooks |
 | CUSTOM_PORT | 5004 | Custom port for using custom voter share update functionality |
 | POOL_VERSION | original | Set the pool website version - options are "original" or "geops" |
@@ -194,44 +194,50 @@ This will get you to the main menu script.
 
 ## CHANGELOG
 
-### 2.7.5 [osrn](https://github.com/osrn)
+### 2.7.6
+dynamic multifee
+- multifee is no longer fixed but fetched dynamically
+- added option to backup databases during reinstall
+
+
+### 2.7.5
 pool template osrn
 - new config options PROPOSALX and PROPOSALX_LANG
 - new pool website option osrn (based on geops template)
 
 
-### 2.7.4 [osrn](https://github.com/osrn)
+### 2.7.4
 - fix: 500 error in pool if new voter registered in tbw sleep
 
 
-### 2.7.3 [upstream]
+### 2.7.3
 - fix: fee burn added to reward alloc calculation
 
 
-### 2.7.2 [osrn](https://github.com/osrn)
+### 2.7.2
 - fix: alias expansion needs to be performed earlier in install script
 - fix: dotenv cannot expand variables after quotes in config.sample
 
 
-### 2.7.1 [osrn](https://github.com/osrn)
+### 2.7.1
 - fix: div/0 when votesum is 0
 
 
-### 2.7.0 [osrn](https://github.com/osrn)
+### 2.7.0
 - Solar Mainnet added to networks
 - fix: dotenv cannot expand variables after quotes in config.sample
 
 
-### 2.6.7 [osrn](https://github.com/osrn)
+### 2.6.7
 - changes in installer and tbw.sh for detecting pm2 executable. Compatible with solar 3.2.0-next.2+.
 - installer now offers to backup the config if detects a reinstall and stops if backup fails.
 
 
-### 2.6.6 [osrn](https://github.com/osrn)
+### 2.6.6
 - doc: README-FIRST merged to README with updated install & config info 
 
 
-### 2.6.5 [osrn](https://github.com/osrn)
+### 2.6.5
 - fix: read blocks in correct order when calculating productivity
 - requires a modified python-client[^1] to utilize orderBy parameter when fetching blocks from API<br>
 
@@ -247,7 +253,7 @@ deactivate
 [^1]: using forked repo until pull request is approved at solar-network/python-client. 
 
 
-### 2.6.4 [osrn](https://github.com/osrn)
+### 2.6.4
 - To keep solar a non-sudo user and simplify the installation, seperated core installation from tbw.sh into the standalone [install.sh](./install.sh) script.
 - install.sh now rewrites CPATH to prevent python package compilation errors (CPATH is restored back afterwards) 
 - tbw.sh is used for initialization and start-stop actions.
@@ -263,7 +269,7 @@ deactivate
 *(\*) compatibiliy with other chains preserved by keeping'localhost' as the default postgresql host which defaults to TCPIP connection.*
 
 
-### 2.6.3 [osrn](https://github.com/osrn)
+### 2.6.3
 Pool enhanced with more information retrieved through Solar API
 - Added relay sync status and height
 - Added delegate total votes
